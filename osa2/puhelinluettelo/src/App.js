@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
-import Filter from './Filter'
-import PersonForm from './PersonForm'
-import Persons from './Persons'
+import Filter from './components/Filter'
+import PersonForm from './components/PersonForm'
+import Persons from './components/Persons'
+import Notification from './components/Notification'
+import NumberService from './services/NumberService'
 
 const App = () => {
   const [ persons, setPersons] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [newNumber, setNewNumber ] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [message, setMessage] = useState('')
+  const [messageColor, setMessageColor] = useState('green')
 
   useEffect(() =>{
-    axios
-      .get('http://localhost:3001/persons')
+    NumberService
+      .getAll()
       .then(response => {
         setPersons(response.data)
       })
@@ -21,7 +25,29 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault()
     if(persons.map(person => person.name).includes(newName)){ //name found
-      window.alert(`${newName} is already added to phonebook`)
+      const foundPerson = persons.find(person => person.name === newName)
+      if(foundPerson.number === newNumber){
+        window.alert(`${newName} is already added to phonebook`)
+      }
+      else{
+        const answer = window.confirm(`${newName} is already added to phonebook, replace
+        old number with the new one?`)
+        if(answer===true){
+          const fixedPerson = {...foundPerson,number: newNumber}
+          NumberService.replace(fixedPerson)
+          .then(response => {
+            const i = persons.findIndex(person => person.name === newName)
+            const fixedPersons = [...persons]
+            fixedPersons[i] = response.data
+            setPersons(fixedPersons)
+          })
+          .catch(error =>{
+            setMessageColor('red')
+            setMessage(`information of ${foundPerson.name} was already deleted from the server. Please refresh page.`)
+          }
+          )
+        }
+      }
     }
     else{
       const person = {name: newName, number: newNumber}
@@ -31,6 +57,10 @@ const App = () => {
         setPersons(persons.concat(response.data))
         setNewName('')
         setNewNumber('')
+        setMessageColor('green')
+        setMessage(
+          `User '${person.name}' was added`
+        )
       })
     }
   }
@@ -48,6 +78,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} messageColor={messageColor}/>
       <Filter filter={newFilter} handler={handleFilterChange}/>
 
       <PersonForm 
@@ -59,7 +90,7 @@ const App = () => {
 
       <div>
       <h2>Numbers</h2>
-      <Persons persons={persons} filter={newFilter}/>
+      <Persons persons={persons} setPersons={setPersons} filter={newFilter}/>
       </div>
     </div>
   )

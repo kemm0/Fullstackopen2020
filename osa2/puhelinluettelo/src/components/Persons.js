@@ -14,7 +14,7 @@ const Persons = (props) => {
     return(
         <div>
         {props.persons.filter(person => person.name.toLowerCase().includes(props.filter.toLowerCase())).map((filteredperson) =>
-            <p key={filteredperson.name}>{filteredperson.name} {filteredperson.number} {filteredperson.id}
+            <p key={filteredperson.name}>{filteredperson.name} {filteredperson.number}
             <button onClick={() => handleRemove(filteredperson.id,filteredperson.name)}>remove</button> 
             </p>)}
         </div>

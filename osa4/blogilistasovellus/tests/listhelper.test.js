@@ -72,7 +72,7 @@ test('mostBlogs returns Robert C. Martin', () => {
         blogs: 3
     })
 })
-test.only('mostLikes returns Edsger W. Dijkstra', () => {
+test('mostLikes returns Edsger W. Dijkstra', () => {
     const result = listHelper.mostLikes(blogs)
     expect(result).toEqual({
         author: 'Edsger W. Dijkstra',

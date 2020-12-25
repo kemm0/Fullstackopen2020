@@ -19,7 +19,10 @@ const initialBlogs = [
     __v: 0
   }
 ]
-
+const testUser = {
+  username: "test",
+  password: "Salaisuus123"
+}
 const blogsInDb = async () => {
   const blogs = await Blog.find({})
   return blogs.map(blog => blog.toJSON())

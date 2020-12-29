@@ -1,6 +1,5 @@
 import React, {useState} from 'react'
-import blogService from '../services/blogService'
-const Blog = ({ blog, updateBlog }) => {
+const Blog = ({ blog, updateBlog, removeBlog, user }) => {
 
   const blogStyle = {
     paddingTop: 10,
@@ -20,10 +19,25 @@ const Blog = ({ blog, updateBlog }) => {
     console.log(likedBlog)
     console.log(likedBlog.id)
     likedBlog.likes = blog.likes + 1
-    blogService.modify(likedBlog)
     updateBlog(likedBlog)
   }
-  if(viewInfo){
+  const remove = () => {
+    removeBlog(blog)
+  }
+  if(viewInfo && (user.username === blog.user.username)){
+    return(
+      <div style={blogStyle}>
+        <ul>
+          <li>title: {blog.title} <button onClick={toggleVisibility}>close</button></li>
+          <li>author: {blog.author}</li>
+          <li>url: {blog.url}</li>
+          <li>likes: {blog.likes} <button onClick={like}>like</button></li>
+        </ul>
+        <button onClick={remove}>delete</button>
+      </div>
+    )
+  }
+  else if (viewInfo){
     return(
       <div style={blogStyle}>
         <ul>

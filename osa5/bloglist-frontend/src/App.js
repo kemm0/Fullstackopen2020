@@ -32,6 +32,7 @@ const App = () => {
     if (loggedUserJSON) {
       const loggedUser = JSON.parse(loggedUserJSON)
       setUser(loggedUser)
+      console.log(loggedUser)
       blogService.setToken(loggedUser.token)
       blogService.getAll()
       .then(blogs => {
@@ -70,7 +71,17 @@ const App = () => {
     const blogIndex = tempBlogs.map(blog => blog.id).findIndex(id => id === blogObject.id)
     tempBlogs[blogIndex] = blogObject
     setBlogs(tempBlogs)
+    blogService.modify(blogObject)
   }
+
+  const removeBlog = (blogObject) => {
+    if(window.confirm(`Remove blog "${blogObject.title}" by ${blogObject.author}?`) === true){
+      const tempBlogs = [...blogs].filter(blog => blog.id !== blogObject.id)
+      setBlogs(tempBlogs)
+      blogService.remove(blogObject)
+    }
+  }
+
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     console.log(blogObject)
@@ -122,6 +133,8 @@ const App = () => {
             key={i}
             blog={blog}
             updateBlog={updateBlog} 
+            removeBlog={removeBlog}
+            user={user}
           />
         )}
       </div>

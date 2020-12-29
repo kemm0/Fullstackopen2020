@@ -36,6 +36,7 @@ const App = () => {
       blogService.getAll()
       .then(blogs => {
         setBlogs(blogs)
+        console.log(blogs)
       })
     }
   }, [])
@@ -64,7 +65,12 @@ const App = () => {
   const handleLogOut = () => {
     window.localStorage.removeItem('loggedUser')
   }
-
+  const updateBlog = (blogObject) => {
+    const tempBlogs = [...blogs]
+    const blogIndex = tempBlogs.map(blog => blog.id).findIndex(id => id === blogObject.id)
+    tempBlogs[blogIndex] = blogObject
+    setBlogs(tempBlogs)
+  }
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
     console.log(blogObject)
@@ -90,14 +96,6 @@ const App = () => {
 
   const blogsList = () => (
     <div>
-      <ul>
-        {blogs.map((blog, i) => 
-          <Blog
-            key={i}
-            blog={blog} 
-          />
-        )}
-      </ul>
       <Togglable buttonLabel="New blog" ref={blogFormRef}>
         <BlogForm
           createBlog={addBlog}
@@ -114,9 +112,20 @@ const App = () => {
     {user === null ?
       loginForm() :
       <div>
-        <p>logged in as {user.name} <button onClick={handleLogOut}>logout</button></p>
-        {blogsList()}
+        <div>
+          <p>logged in as {user.name} <button onClick={handleLogOut}>logout</button></p>
+          {blogsList()}
+        </div>
+        <div>
+        {[...blogs].sort((a,b) => b.likes - a.likes).map((blog, i) => 
+          <Blog
+            key={i}
+            blog={blog}
+            updateBlog={updateBlog} 
+          />
+        )}
       </div>
+    </div>
     }
     </div>
   )

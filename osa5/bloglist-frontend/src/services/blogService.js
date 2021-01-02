@@ -14,7 +14,7 @@ const getAll = () => {
 
 const create = async (blogObject) => {
   const config = {
-    headers: { Authorization: token}
+    headers: { Authorization: token }
   }
   const request = await axios.post(baseUrl, {
     title: blogObject.title,
@@ -25,7 +25,7 @@ const create = async (blogObject) => {
 }
 const modify = async (blogObject) => {
   const config = {
-    headers: { Authorization: token}
+    headers: { Authorization: token }
   }
   const request = await axios.put(`${baseUrl}/${blogObject.id}`, {
     title: blogObject.title,
@@ -37,7 +37,7 @@ const modify = async (blogObject) => {
 }
 const remove = async (blogObject) => {
   const config = {
-    headers: { Authorization: token}
+    headers: { Authorization: token }
   }
   const request = await axios.delete(`${baseUrl}/${blogObject.id}`,config)
   return request.data

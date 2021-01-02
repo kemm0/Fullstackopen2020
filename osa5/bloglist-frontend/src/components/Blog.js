@@ -1,6 +1,5 @@
-import React, {useState} from 'react'
-const Blog = ({ blog, updateBlog, removeBlog, user }) => {
-
+import React,{ useState } from 'react'
+const Blog = ({ blog, removeBlog, like, user }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
@@ -14,46 +13,42 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   const toggleVisibility = () => {
     setViewInfo(!viewInfo)
   }
-  const like = () => {
-    const likedBlog = {...blog}
-    console.log(likedBlog)
-    console.log(likedBlog.id)
-    likedBlog.likes = blog.likes + 1
-    updateBlog(likedBlog)
-  }
   const remove = () => {
     removeBlog(blog)
   }
+  const likeBlog = () => {
+    like(blog)
+  }
   if(viewInfo && (user.username === blog.user.username)){
     return(
-      <div style={blogStyle}>
-        <ul>
-          <li>title: {blog.title} <button onClick={toggleVisibility}>close</button></li>
-          <li>author: {blog.author}</li>
-          <li>url: {blog.url}</li>
-          <li>likes: {blog.likes} <button onClick={like}>like</button></li>
-        </ul>
+      <li style={blogStyle}>
+        <p>title: {blog.title}</p>
+        <p>author: {blog.author}</p>
+        <p>url: {blog.url}</p>
+        <p>likes: {blog.likes} <button onClick={likeBlog}>like</button></p>
+        <button onClick={toggleVisibility}>close</button>
         <button onClick={remove}>delete</button>
-      </div>
+      </li>
     )
   }
   else if (viewInfo){
     return(
-      <div style={blogStyle}>
-        <ul>
-          <li>title: {blog.title} <button onClick={toggleVisibility}>close</button></li>
-          <li>author: {blog.author}</li>
-          <li>url: {blog.url}</li>
-          <li>likes: {blog.likes} <button onClick={like}>like</button></li>
-        </ul>
-      </div>
+      <li style={blogStyle}>
+        <p>title: {blog.title}</p>
+        <p>author: {blog.author}</p>
+        <p>url: {blog.url}</p>
+        <p>likes: {blog.likes} <button onClick={likeBlog}>like</button></p>
+        <button onClick={toggleVisibility}>close</button>
+      </li>
     )
   }
   else{
     return(
-      <div style={blogStyle}>
-      {blog.title} <button onClick={toggleVisibility}>view</button>
-    </div>
+      <li style={blogStyle}>
+        <p>title: {blog.title}</p>
+        <p>author: {blog.author}</p>
+        <button onClick={toggleVisibility}>view</button>
+      </li>
     )
   }
 }

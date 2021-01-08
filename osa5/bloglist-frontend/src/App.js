@@ -78,11 +78,11 @@ const App = () => {
 
   const addBlog = (blogObject) => {
     blogFormRef.current.toggleVisibility()
-    console.log(blogObject)
     blogService
       .create(blogObject)
       .then(returnedBlog => {
         setBlogs(blogs.concat(returnedBlog))
+        console.log(returnedBlog)
         notify(`Added "${returnedBlog.title}" by ${returnedBlog.author}`)
       })
   }
@@ -128,7 +128,7 @@ const App = () => {
             <p>logged in as {user.name} <button onClick={handleLogOut}>logout</button></p>
             {blogsList()}
           </div>
-          <ul>
+          <ul id='blogs'>
             {[...blogs].sort((a,b) => b.likes - a.likes).map((blog, i) =>
               <Blog
                 key={i}

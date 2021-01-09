@@ -1,9 +1,16 @@
-const reducer = (state = '', action) => {
+const notificationReducer = (state = '', action) => {
   switch(action.type) {
-    case 'VOTE':
-      return 'voted'
-    case 'CREATE':
-      return 'created'
+    case 'SET_NOTIFICATION':
+      return action.notification
   }
   return state
 }
+
+export const notificationChange = notification => {
+  return {
+    type: 'SET_NOTIFICATION',
+    notification
+  }
+}
+
+export default notificationReducer

@@ -8,14 +8,10 @@ import {notificationChange}
 const AnecdoteList = () => {
   const anecdotes = useSelector(state => state.anecdotes)
   const dispatch = useDispatch()
-  const vote = (id) => {
-    console.log('vote', id)
-    dispatch(voteAnecdote(id))
-    const content = anecdotes.find(anecdote => anecdote.id === id).content
-    dispatch(notificationChange(`Voted ${content}`))
-    setTimeout(() => {
-      dispatch(notificationChange(''))
-    }, 5000)
+  const vote = (anecdote) => {
+    console.log('vote', anecdote.content)
+    dispatch(voteAnecdote(anecdote))
+    dispatch(notificationChange(`Voted ${anecdote.content}`,5))
   }
   return (
     <div>
@@ -27,7 +23,7 @@ const AnecdoteList = () => {
         </div>
         <div>
           has {anecdote.votes}
-          <button onClick={() => vote(anecdote.id)}>vote</button>
+          <button onClick={() => vote(anecdote)}>vote</button>
         </div>
       </div>
     )}
